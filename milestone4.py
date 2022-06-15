@@ -5,9 +5,9 @@ import rospy
 from geometry_msgs.msg import Twist
 import sys, select, os
 if os.name == 'nt':
-  import msvcrt, time
+    import msvcrt, time
 else:
-  import tty, termios
+    import tty, termios
 import rospy
 from geometry_msgs.msg import Twist
 from darknet_ros_msgs.msg import BoundingBoxes
@@ -40,7 +40,7 @@ class Rotate():
         twist = Twist()
         twist.linear.x = 0.0; twist.linear.y = 0.0; twist.linear.z = 0.0
         twist.angular.x = 0.0; twist.angular.y = 0.0
-	print(1111, x_mid, CENTER)
+        print(1111, x_mid, CENTER)
 
         if x_mid > CENTER - 10:
             self.angular_z = -0.05
@@ -48,8 +48,7 @@ class Rotate():
             self.angular_z = 0.05
         else:
             self.angular_z = 0
-	twist.angular.z = self.angular_z
-	twist.angular.x = self.angular_z
+        twist.angular.z = self.angular_z
         
         self.cmd_pub.publish(twist)
     
@@ -57,6 +56,8 @@ class Rotate():
         rate = rospy.Rate(10)
         while not rospy.is_shutdown():
             rate.sleep()
+    
+    
         
 
 def main():
