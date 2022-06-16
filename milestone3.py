@@ -64,6 +64,8 @@ e = """
 Communications Failed
 """
 
+from std_msgs.msg import Float64MultiArray
+
 def getKey():
     if os.name == 'nt':
         timeout = 0.1
@@ -136,7 +138,7 @@ if __name__=="__main__":
 
     rospy.init_node('turtlebot3_teleop')
     vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
-    arm_pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
+    arm_pub = rospy.Publisher('joint_trajectory_point', Float64MultiArray, queue_size=10)
 
     turtlebot3_model = rospy.get_param("model", "burger")
 
@@ -146,7 +148,7 @@ if __name__=="__main__":
     control_linear_vel  = 0.0
     control_angular_vel = 0.0
 
-    angle1, angle2, angle3, angle4 = 0., 0., 0., 0.,
+    angle1, angle2, angle3, angle4 = 0., 0., 0., 0.
 
     try:
         print(msg)
@@ -200,7 +202,13 @@ if __name__=="__main__":
             control_angular_vel = makeSimpleProfile(control_angular_vel, target_angular_vel, (ANG_VEL_STEP_SIZE/2.0))
             twist.angular.x = 0.0; twist.angular.y = 0.0; twist.angular.z = control_angular_vel
 
-            pub.publish(twist)
+            vel_pub.publish(twist)
+
+            msg = Float64MultiArray()
+            msg.data = [-1, angle1, angle2, angle3, angle4]
+            arm_pub.publish(msg)
+
+            
 
     except:
         print(e)
@@ -209,7 +217,12 @@ if __name__=="__main__":
         twist = Twist()
         twist.linear.x = 0.0; twist.linear.y = 0.0; twist.linear.z = 0.0
         twist.angular.x = 0.0; twist.angular.y = 0.0; twist.angular.z = 0.0
-        pub.publish(twist)
+        vel_pub.publish(twist)
+
+        msg = Float64MultiArray()
+        msg.data = [-1, 0, 0, 0, 0]
+        arm_pub.publish(msg)
+
 
     if os.name != 'nt':
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
