@@ -94,12 +94,13 @@ def vels(target_linear_vel, target_angular_vel):
 
 
 def arms(angle1, angle2, angle3, angle4):
-    return f"""
+    tmp = f"""
     angle1 : {angle1}
     angle2 : {angle2}
     angle3 : {angle3}
     angle4 : {angle4}
     """
+    return tmp
 
 
 def makeSimpleProfile(output, input, slop):
