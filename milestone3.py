@@ -145,6 +145,7 @@ if __name__=="__main__":
     rospy.init_node('turtlebot3_teleop')
     vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
     arm_pub = rospy.Publisher('joint_trajectory_point', Float64MultiArray, queue_size=10)
+    grib_pub = rospy.Publisher('gripper_position', Float64MultiArray, queue_size=10)
 
     turtlebot3_model = rospy.get_param("model", "burger")
 
@@ -155,6 +156,8 @@ if __name__=="__main__":
     control_angular_vel = 0.0
 
     angle1, angle2, angle3, angle4 = 0., 0., 0., 0.
+
+    grib_angle = 0.025
 
     try:
         print(msg)
@@ -176,7 +179,7 @@ if __name__=="__main__":
                 target_angular_vel = checkAngularLimitVelocity(target_angular_vel - ANG_VEL_STEP_SIZE)
                 status = status + 1
                 print(vels(target_linear_vel,target_angular_vel))
-            elif key == ' ' or key == 's' :
+            elif key == 's' :
                 target_linear_vel   = 0.0
                 control_linear_vel  = 0.0
                 target_angular_vel  = 0.0
@@ -195,6 +198,11 @@ if __name__=="__main__":
             elif key == '4':
                 angle4 -= 0.01
                 print(arms(angle1, angle2, angle3, angle4))
+            elif key == ' ':
+                if grib_angle == 0.025:
+                    grib_angle = -0.1
+                else:
+                    grib_angle = 0.025
                 
             else:
                 if (key == '\x03'):
@@ -214,9 +222,13 @@ if __name__=="__main__":
 
             vel_pub.publish(twist)
 
-            msg = Float64MultiArray()
-            msg.data = [-1, angle1, angle2, angle3, angle4]
-            arm_pub.publish(msg)
+            arm_msg = Float64MultiArray()
+            arm_msg.data = [-1, angle1, angle2, angle3, angle4]
+            arm_pub.publish(arm_msg)
+            
+            grib_msg = Float64MultiArray()
+            grib_msg.data = [grib_angle]
+            grib_pub.publish(grib_msg)
 
             
 
@@ -229,9 +241,13 @@ if __name__=="__main__":
         twist.angular.x = 0.0; twist.angular.y = 0.0; twist.angular.z = 0.0
         vel_pub.publish(twist)
 
-        msg = Float64MultiArray()
-        msg.data = [-1, 0, 0, 0, 0]
-        arm_pub.publish(msg)
+        arm_msg = Float64MultiArray()
+        arm_msg.data = [-1, 0, 0, 0, 0]
+        arm_pub.publish(arm_msg)
+
+        grib_msg = Float64MultiArray()
+        grib_msg.data = [-0.1]
+        grib_pub.publish(grib_msg)
 
 
     if os.name != 'nt':
