@@ -92,6 +92,16 @@ def getKey():
 def vels(target_linear_vel, target_angular_vel):
     return "currently:\tlinear vel %s\t angular vel %s " % (target_linear_vel,target_angular_vel)
 
+
+def arms(angle1, angle2, angle3, angle4):
+    return f"""
+    angle1 : {angle1}
+    angle2 : {angle2}
+    angle3 : {angle3}
+    angle4 : {angle4}
+    """
+
+
 def makeSimpleProfile(output, input, slop):
     if input > output:
         output = min( input, output + slop )
@@ -179,12 +189,16 @@ if __name__=="__main__":
                 print(vels(target_linear_vel, target_angular_vel))
             elif key == '1':
                 angle1 += 0.01
+                print(arms(angle1, angle2, angle3, angle4))
             elif key == '2':
                 angle2 += 0.01
+                print(arms(angle1, angle2, angle3, angle4))
             elif key == '3':
                 angle3 += 0.01
+                print(arms(angle1, angle2, angle3, angle4))
             elif key == '4':
-                angle4 += 0.01
+                angle4 -= 0.01
+                print(arms(angle1, angle2, angle3, angle4))
                 
             else:
                 if (key == '\x03'):
