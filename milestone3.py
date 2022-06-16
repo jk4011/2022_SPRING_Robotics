@@ -94,7 +94,7 @@ def vels(target_linear_vel, target_angular_vel):
 
 
 def arms(angle1, angle2, angle3, angle4):
-    tmp = f"\n angle1 : {angle1}\n angle2 : {angle2}\n angle3 : {angle3}\n angle4 : {angle4}\n\n"
+    tmp = "\n angle1 : %s \n angle2 : %s \n angle3 : %s \n angle4 : %s \n\n" % (angle1, angle2, angle3, angle4)
     return tmp
 
 
