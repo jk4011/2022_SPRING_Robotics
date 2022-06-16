@@ -44,16 +44,16 @@ class Rotate():
 
         self.sleep()
     
-    def rotate_and_stop(self, b_box):
+    def rotate_and_stop(self, b_box, sensitivity):
         
         x_mid = (b_box.xmin + b_box.xmax) / 2
         
         twist = Twist()
 
-        if x_mid > CENTER - self.margin_of_centering:
-            self.angular_z = -self.rotation_speed
-        elif x_mid < CENTER + self.margin_of_centering:
-            self.angular_z = self.rotation_speed
+        if x_mid > CENTER - self.margin_of_centering * sensitivity:
+            self.angular_z = -self.rotation_speed * sensitivity
+        elif x_mid < CENTER + self.margin_of_centering * sensitivity:
+            self.angular_z = self.rotation_speed * sensitivity
         else:
             self.angular_z = 0
             self.step_count += 1
